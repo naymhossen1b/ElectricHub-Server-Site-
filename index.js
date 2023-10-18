@@ -33,11 +33,13 @@ async function run() {
       res.send(result);
     })
 
+    // brands category
     app.post('/products', async(req, res) => {
       const newData = req.body;
       const result = await userCollection.insertOne(newData);
       res.send(result)
     })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
