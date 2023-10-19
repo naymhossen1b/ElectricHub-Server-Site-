@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -23,46 +23,47 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-    const userCollection = client.db("electricHub").collection("customarDB");
-    const laptopsCollection = client.db("electricHub").collection("laptopsDB");
+
+    // const userCollection = client.db("electricHub").collection("customarDB");
+    const categoryCollection = client.db("electricHub").collection("categoryDB");
+
     const smartWatchCollection = client.db("electricHub").collection("watchDB");
     const tabletCollection = client.db("electricHub").collection("tabletsDB");
-    const headPhoneCollection = client.db("electricHub").collection("headphoneDB");
-    const gamingCollection = client.db("electricHub").collection("gamingDB");
+    const laptopCollection = client.db("electricHub").collection("laptopsDB");
 
+    // const gamingCollection = client.db("electricHub").collection("gamingDB");
 
+    // ///GAMING DATA
+    // app.get('/gamings', async(req, res) => {
+    //   const cursor = userCollection.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // })
 
-    ///GAMING DATA
-    app.get('/gamings', async(req, res) => {
-      const cursor = gamingCollection.find();
+    // app.post('/gamings', async(req, res) => {
+    //   const newData = req.body;
+    //   const result = await userCollection.insertOne(newData);
+    //   res.send(result)
+    // })
+
+    // // LAPTOPS DB
+    app.get('/laptop', async(req, res) => {
+      const cursor = laptopCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     })
 
-    app.post('/gamings', async(req, res) => {
+    app.post('/laptop', async(req, res) => {
       const newData = req.body;
-      const result = await gamingCollection.insertOne(newData);
+      const result = await laptopCollection.insertOne(newData);
       res.send(result)
     })
 
-
-    // HEADPHONES DB
-    app.get('/headphones', async(req, res) => {
-      const cursor = headPhoneCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-
-    app.post('/headphones', async(req, res) => {
-      const newData = req.body;
-      const result = await headPhoneCollection.insertOne(newData);
-      res.send(result)
-    })
-
-    // TABLETS DB
+    // // TABLETS DB
     app.get('/tablets', async(req, res) => {
       const cursor = tabletCollection.find();
       const result = await cursor.toArray();
+      // console.log(result);
       res.send(result);
     })
 
@@ -72,49 +73,55 @@ async function run() {
       res.send(result)
     })
 
-    // SMART WATCH DB
-    app.get('/products/Watchs', async(req, res) => {
+    // // SMART WATCH DB
+     app.get("/Watchs", async (req, res) => {
       const cursor = smartWatchCollection.find();
       const result = await cursor.toArray();
       res.send(result);
-    })
+    });
 
-    app.post('/products/Watchs', async(req, res) => {
+    app.post('/Watchs', async(req, res) => {
       const newData = req.body;
       const result = await smartWatchCollection.insertOne(newData);
       res.send(result)
     })
 
+    ///dinamik style 4 product
+    // app.get('/products/:type', async(req, res) => {
+    //   const types = req.params.type;
+    //   // console.log(type);
+    //   const query = { type : new ObjectId(types)}
+    //   // const cursor = userCollection.find(query);
+    //   const result = await userCollection.findOne(query);
+    //   res.send(result);
+    // })
 
-    ///laptop data
+    // app.get("/products", async (req, res) => {
+    //   const cursor = userCollection.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // });
 
-    app.get('/products/Laptop', async(req, res) => {
-      const cursor = laptopsCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-
-    app.post('/products', async(req, res) => {
-      const newData = req.body;
-      const result = await laptopsCollection.insertOne(newData);
-      res.send(result)
-    })
-
-
-    ///category and tvs data/////////////////////////
-    app.get('/products', async(req, res) => {
-      const cursor = userCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-
-    // brands category
-    app.post('/products', async(req, res) => {
+    app.post("/products", async (req, res) => {
       const newData = req.body;
       const result = await userCollection.insertOne(newData);
-      res.send(result)
-    })
+      res.send(result);
+    });
 
+    ///category and tvs data/////////////////////////
+
+    app.get("/category", async (req, res) => {
+      const cursor = categoryCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // brands category
+    app.post("/category", async (req, res) => {
+      const newData = req.body;
+      const result = await categoryCollection.insertOne(newData);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
