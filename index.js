@@ -33,7 +33,24 @@ async function run() {
     const headPhoneCollection = client.db("electricHub").collection("headphoneDB");
     const watchCollection = client.db("electricHub").collection("watchesDB");
 
-    // ///watch DATA
+
+    // // /// ALL DATA FETCH
+    // app.get("/proget/:brand_names", async (req, res) => {
+    //   const brand = req.params.id;
+    //   const query = { brand_names: new ObjectId(brand) }
+    //   const cursor = userCollection.find(query);
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // });
+
+    // app.post("/products", async (req, res) => {
+    //   const newData = req.body;
+    //   const result = await userCollection.insertOne(newData);
+    //   res.send(result);
+    // });
+
+
+    ///watch DATA ////////////////////////////
     app.get("/watch", async (req, res) => {
       const cursor = watchCollection.find();
       const result = await cursor.toArray();
@@ -98,14 +115,65 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/products", async (req, res) => {
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
     app.post("/products", async (req, res) => {
       const newData = req.body;
       const result = await userCollection.insertOne(newData);
       res.send(result);
     });
 
-        /* updated product function  */
 
+    /* updated product function  *////////////////////////////////////////////
+
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id)};
+      const cursor = await tvsCollection.findOne(filter);
+      console.log(cursor, id);
+      res.send(cursor);
+    });
+
+    // app.get("/product/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const filter = { _id: new ObjectId(id)};
+    //   const cursor = await tabletCollection.findOne(filter);
+    //   console.log(cursor, id);
+    //   res.send(cursor);
+    // });
+
+
+    ////////////////////PUT/UPDATE//////////////////
+
+    app.get("/watch/:id", async (req, res) => {
+      const cursor = watchCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/headphone/:id", async (req, res) => {
+      const cursor = headPhoneCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/laptop/:id", async (req, res) => {
+      const cursor = laptopCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+      app.get("/tablets/:id", async (req, res) => {
+        const cursor = tabletCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      });
+
+      /// data put function
     app.put("/tvs/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
@@ -121,19 +189,62 @@ async function run() {
           tv_image: updatedProducts.tv_image,
         },
       };
-      const result = await customarCollection.updateOne(filter, tvs, option);
+      const result = await tvsCollection.updateOne(filter, tvs, option);
+      res.send(result);
+    });
+    app.put("/watch/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const option = { upert: true };
+      const updatedProducts = req.body;
+      const tvs = {
+        $set: {
+          tv_name: updatedProducts.tv_name,
+          brand_name: updatedProducts.brand_name,
+          type: updatedProducts.type,
+          tv_price: updatedProducts.tv_price,
+          ratings: updatedProducts.ratings,
+          tv_image: updatedProducts.tv_image,
+        },
+      };
+      const result = await watchCollection.updateOne(filter, tvs, option);
+      res.send(result);
+    });
+    app.put("/headphone/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const option = { upert: true };
+      const updatedProducts = req.body;
+      const tvs = {
+        $set: {
+          tv_name: updatedProducts.tv_name,
+          brand_name: updatedProducts.brand_name,
+          type: updatedProducts.type,
+          tv_price: updatedProducts.tv_price,
+          ratings: updatedProducts.ratings,
+          tv_image: updatedProducts.tv_image,
+        },
+      };
+      const result = await headPhoneCollection.updateOne(filter, tvs, option);
       res.send(result);
     });
 
-    ///category and tvs data/////////////////////////
+    ///////////////products data cart////////////////////////////////////////////////////
 
+    app.delete('/products/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id)};
+      const result = await userCollection.deleteOne(query);
+      res.send(result)
+    })
+
+    ///category and tvs data/////////////////////////
     app.get("/category", async (req, res) => {
       const cursor = categoryCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
 
-    // brands category
     app.post("/category", async (req, res) => {
       const newData = req.body;
       const result = await categoryCollection.insertOne(newData);
