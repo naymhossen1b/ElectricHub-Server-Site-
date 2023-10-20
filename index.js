@@ -24,87 +24,104 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    // const userCollection = client.db("electricHub").collection("customarDB");
+    const userCollection = client.db("electricHub").collection("customarDB");
     const categoryCollection = client.db("electricHub").collection("categoryDB");
 
-    const smartWatchCollection = client.db("electricHub").collection("watchDB");
     const tabletCollection = client.db("electricHub").collection("tabletsDB");
     const laptopCollection = client.db("electricHub").collection("laptopsDB");
+    const tvsCollection = client.db("electricHub").collection("tvsDB");
+    const headPhoneCollection = client.db("electricHub").collection("headphoneDB");
+    const watchCollection = client.db("electricHub").collection("watchesDB");
 
-    // const gamingCollection = client.db("electricHub").collection("gamingDB");
-
-    // ///GAMING DATA
-    // app.get('/gamings', async(req, res) => {
-    //   const cursor = userCollection.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // })
-
-    // app.post('/gamings', async(req, res) => {
-    //   const newData = req.body;
-    //   const result = await userCollection.insertOne(newData);
-    //   res.send(result)
-    // })
-
-    // // LAPTOPS DB
-    app.get('/laptop', async(req, res) => {
-      const cursor = laptopCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-
-    app.post('/laptop', async(req, res) => {
-      const newData = req.body;
-      const result = await laptopCollection.insertOne(newData);
-      res.send(result)
-    })
-
-    // // TABLETS DB
-    app.get('/tablets', async(req, res) => {
-      const cursor = tabletCollection.find();
-      const result = await cursor.toArray();
-      // console.log(result);
-      res.send(result);
-    })
-
-    app.post('/tablets', async(req, res) => {
-      const newData = req.body;
-      const result = await tabletCollection.insertOne(newData);
-      res.send(result)
-    })
-
-    // // SMART WATCH DB
-     app.get("/Watchs", async (req, res) => {
-      const cursor = smartWatchCollection.find();
+    // ///watch DATA
+    app.get("/watch", async (req, res) => {
+      const cursor = watchCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
 
-    app.post('/Watchs', async(req, res) => {
+    app.post("/watch", async (req, res) => {
       const newData = req.body;
-      const result = await smartWatchCollection.insertOne(newData);
-      res.send(result)
-    })
+      const result = await watchCollection.insertOne(newData);
+      res.send(result);
+    });
 
-    ///dinamik style 4 product
-    // app.get('/products/:type', async(req, res) => {
-    //   const types = req.params.type;
-    //   // console.log(type);
-    //   const query = { type : new ObjectId(types)}
-    //   // const cursor = userCollection.find(query);
-    //   const result = await userCollection.findOne(query);
-    //   res.send(result);
-    // })
+    // ///TVS DATA
+    app.get("/headphone", async (req, res) => {
+      const cursor = headPhoneCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
-    // app.get("/products", async (req, res) => {
-    //   const cursor = userCollection.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // });
+    app.post("/headphone", async (req, res) => {
+      const newData = req.body;
+      const result = await headPhoneCollection.insertOne(newData);
+      res.send(result);
+    });
+
+    // ///TVS DATA
+    app.get("/tvs", async (req, res) => {
+      const cursor = tvsCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/tvs", async (req, res) => {
+      const newData = req.body;
+      const result = await tvsCollection.insertOne(newData);
+      res.send(result);
+    });
+
+    // // LAPTOPS DB
+    app.get("/laptop", async (req, res) => {
+      const cursor = laptopCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/laptop", async (req, res) => {
+      const newData = req.body;
+      const result = await laptopCollection.insertOne(newData);
+      res.send(result);
+    });
+
+    // // TABLETS DB
+    app.get("/tablets", async (req, res) => {
+      const cursor = tabletCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/tablets", async (req, res) => {
+      const newData = req.body;
+      const result = await tabletCollection.insertOne(newData);
+      res.send(result);
+    });
 
     app.post("/products", async (req, res) => {
       const newData = req.body;
       const result = await userCollection.insertOne(newData);
+      res.send(result);
+    });
+
+        /* updated product function  */
+
+    app.put("/tvs/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const option = { upert: true };
+      const updatedProducts = req.body;
+      const tvs = {
+        $set: {
+          tv_name: updatedProducts.tv_name,
+          brand_name: updatedProducts.brand_name,
+          type: updatedProducts.type,
+          tv_price: updatedProducts.tv_price,
+          ratings: updatedProducts.ratings,
+          tv_image: updatedProducts.tv_image,
+        },
+      };
+      const result = await customarCollection.updateOne(filter, tvs, option);
       res.send(result);
     });
 
