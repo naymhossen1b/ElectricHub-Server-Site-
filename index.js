@@ -35,11 +35,12 @@ async function run() {
 
 
     // // /// ALL DATA FETCH
-    // app.get("/proget/:brand_names", async (req, res) => {
-    //   const brand = req.params.id;
-    //   const query = { brand_names: new ObjectId(brand) }
-    //   const cursor = userCollection.find(query);
+    // app.get("/products/type", async (req, res) => {
+    //   // const id = req.params.id;
+    //   // const query = { _id: new ObjectId(id) }
+    //   const cursor = userCollection.find();
     //   const result = await cursor.toArray();
+    //   console.log(result);
     //   res.send(result);
     // });
 
@@ -128,23 +129,39 @@ async function run() {
     });
 
 
-    /* updated product function  *////////////////////////////////////////////
+    /* Details product function  *////////////////////////////////////////////
 
-    app.get("/product/:id", async (req, res) => {
+    app.get("/TV/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id)};
-      const cursor = await tvsCollection.findOne(filter);
-      console.log(cursor, id);
-      res.send(cursor);
+      const singelProduct = await tvsCollection.findOne(filter);
+      res.send(singelProduct);
     });
 
-    // app.get("/product/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const filter = { _id: new ObjectId(id)};
-    //   const cursor = await tabletCollection.findOne(filter);
-    //   console.log(cursor, id);
-    //   res.send(cursor);
-    // });
+    app.get("/watchs/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id)};
+      const cursor = await watchCollection.findOne(filter);
+      res.send(cursor);
+    });
+    app.get("/Tablets/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id)};
+      const cursor = await tabletCollection.findOne(filter);
+      res.send(cursor);
+    });
+    app.get("/Laptop/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id)};
+      const cursor = await laptopCollection.findOne(filter);
+      res.send(cursor);
+    });
+    app.get("/headset/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id)};
+      const cursor = await headPhoneCollection.findOne(filter);
+      res.send(cursor);
+    });
 
 
     ////////////////////PUT/UPDATE//////////////////
@@ -173,8 +190,8 @@ async function run() {
         res.send(result);
       });
 
-      /// data put function
-    app.put("/tvs/:id", async (req, res) => {
+      /// data put function///////////////////////////
+    app.put("/TV/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const option = { upert: true };
@@ -192,6 +209,7 @@ async function run() {
       const result = await tvsCollection.updateOne(filter, tvs, option);
       res.send(result);
     });
+    
     app.put("/watch/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
