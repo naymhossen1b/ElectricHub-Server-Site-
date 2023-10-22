@@ -32,9 +32,15 @@ async function run() {
     const tvsCollection = client.db("electricHub").collection("tvsDB");
     const headPhoneCollection = client.db("electricHub").collection("headphoneDB");
     const watchCollection = client.db("electricHub").collection("watchesDB");
+    const gamingCollection = client.db("electricHub").collection("gamingDB");
 
 
     ////////Add Product///////////
+    app.post("/add/gaming", async (req, res) => {
+      const newProduct = req.body
+      const result = await gamingCollection.insertOne(newProduct);
+      res.send(result);
+    });
     app.post("/add/TV", async (req, res) => {
       const newProduct = req.body
       const result = await tvsCollection.insertOne(newProduct);
@@ -72,6 +78,18 @@ async function run() {
     app.post("/watch", async (req, res) => {
       const newData = req.body;
       const result = await watchCollection.insertOne(newData);
+      res.send(result);
+    });
+    ///Gaming DATA ////////////////////////////
+    app.get("/gaming", async (req, res) => {
+      const cursor = gamingCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/gaming", async (req, res) => {
+      const newData = req.body;
+      const result = await gamingCollection.insertOne(newData);
       res.send(result);
     });
 
@@ -148,6 +166,12 @@ async function run() {
       const singelProduct = await tvsCollection.findOne(filter);
       res.send(singelProduct);
     });
+    app.get("/gaming/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id)};
+      const singelProduct = await gamingCollection.findOne(filter);
+      res.send(singelProduct);
+    });
 
     app.get("/watchs/:id", async (req, res) => {
       const id = req.params.id;
@@ -210,6 +234,12 @@ async function run() {
       const singelProduct = await tabletCollection.findOne(query);
       res.send(singelProduct);
       });
+      app.get("/update/gaming/:id", async (req, res) => {
+        const id = req.params.id;
+      const query = { _id: new ObjectId(id)};
+      const singelProduct = await gamingCollection.findOne(query);
+      res.send(singelProduct);
+      });
 
       /// data put function///////////////////////////
     app.put("/TV/:id", async (req, res) => {
@@ -228,6 +258,24 @@ async function run() {
         },
       };
       const result = await tvsCollection.updateOne(filter, tvs, option);
+      res.send(result);
+    });
+    app.put("/gaming/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const option = { upert: true };
+      const updatedProducts = req.body;
+      const tvs = {
+        $set: {
+          tv_name: updatedProducts.tv_name,
+          brand_name: updatedProducts.brand_name,
+          type: updatedProducts.type,
+          tv_price: updatedProducts.tv_price,
+          ratings: updatedProducts.ratings,
+          tv_image: updatedProducts.tv_image,
+        },
+      };
+      const result = await gamingCollection.updateOne(filter, tvs, option);
       res.send(result);
     });
     
