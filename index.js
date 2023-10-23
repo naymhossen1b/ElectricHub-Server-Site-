@@ -355,14 +355,7 @@ async function run() {
       res.send(result);
     });
 
-    ///////////////products data cart////////////////////////////////////////////////////
-
-    app.delete('/products/:id', async(req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id)};
-      const result = await userCollection.deleteOne(query);
-      res.send(result)
-    })
+  
 
     ///category and tvs data/////////////////////////
     app.get("/category", async (req, res) => {
